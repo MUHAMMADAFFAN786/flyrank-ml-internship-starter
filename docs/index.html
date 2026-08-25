@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machine Learning for Content Refresh Prioritization</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.7;
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px 20px;
+      color: #222;
+      background: #f7f8fa;
+    }
+    .container {
+      background: white;
+      padding: 45px;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+    h1 { font-size: 38px; margin-bottom: 10px; }
+    h2 {
+      margin-top: 42px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 8px;
+    }
+    h3 { margin-top: 28px; }
+    .abstract, .note {
+      background: #f1f5f9;
+      padding: 20px;
+      border-left: 4px solid #333;
+      border-radius: 6px;
+    }
+    .stat {
+      display: inline-block;
+      background: #f1f5f9;
+      padding: 14px 18px;
+      margin: 6px;
+      border-radius: 8px;
+    }
+    img {
+      max-width: 100%;
+      margin: 15px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th { background: #f1f5f9; }
+    code {
+      background: #eee;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+    a { color: #2563eb; }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Machine Learning for Content Refresh Prioritization</h1>
+
+<p><strong>FlyRank ML Internship — Google Search Ranking & Discoverability Capstone</strong></p>
+
+<h2>Abstract</h2>
+
+<div class="abstract">
+<p>
+This research investigates whether historical content-performance signals can help
+prioritize content items for refresh or review. A Random Forest model was developed
+using historical content-performance features and compared with a transparent
+Week-4 hand-written baseline. The model output was converted into a ranked action
+queue containing refresh, review, monitoring, and expansion recommendations.
+The resulting system is intended to support human prioritization rather than make
+automatic publishing decisions. Validation and leakage checks were incorporated
+to keep the analysis honest and avoid treating historical associations as proof of
+future or causal performance.
+</p>
+</div>
+
+<h2>1. Introduction / Problem Statement</h2>
+
+<p>
+Content teams may have many pages that could potentially benefit from review,
+but human reviewers need a practical way to decide what to inspect first.
+</p>
+
+<p>
+The decision supported by this work is:
+<strong>Which content items should a human reviewer look at first for possible
+refresh or review?</strong>
+</p>
+
+<p>
+The model is therefore designed as a directional prioritization tool, not as an
+automatic content-publishing system.
+</p>
+
+<h2>2. Data</h2>
+
+<p>
+This project uses the FlyRank ML Internship search-intelligence dataset and
+historical content-performance signals available through the internship workflow.
+The analysis focuses on public-safe aggregated signals rather than exposing
+client names, domains, private queries, credentials, or raw private exports.
+</p>
+
+<p>
+Features used include historical performance indicators such as impressions,
+position, clicks, engagement/session signals, content age, word count and related
+search-performance measures.
+</p>
+
+<h2>3. Methodology</h2>
+
+<h3>Model</h3>
+<p><strong>Random Forest</strong></p>
+
+<h3>Baseline</h3>
+<p>
+A transparent <strong>Week-4 hand-written baseline</strong> was used as the
+comparison point.
+</p>
+
+<h3>Task</h3>
+<p>
+Content refresh prioritization.
+</p>
+
+<h3>Features</h3>
+<p>
+Historical content-performance signals.
+</p>
+
+<h3>Validation</h3>
+<p>
+The validation setup follows the Week-5 / Week-6 modeling and validation workflow.
+The analysis includes a leakage review conducted during the Week-6 validation audit.
+</p>
+
+<div class="note">
+<strong>Design decision:</strong>
+The system produces ranked decision-support recommendations for human review.
+It does not automatically publish, modify, or remove content.
+</div>
+
+<h2>4. Architecture</h2>
+
+<pre>
+Historical Search / Content Signals
+              |
+              v
+        Feature Preparation
+              |
+              v
+       Validation & Leakage Check
+              |
+              v
+        Random Forest Model
+              |
+              v
+       Probability / Score
+              |
+              v
+       Ranked Action Queue
+              |
+              v
+        Human Reviewer
+</pre>
+
+<h2>5. Results</h2>
+
+<p>
+The modeling workflow generated a ranked action queue for human review and
+produced model and baseline evaluation outputs in the project repository.
+</p>
+
+<div>
+  <span class="stat"><strong>High confidence:</strong> 3,605</span>
+  <span class="stat"><strong>Medium confidence:</strong> 11,395</span>
+  <span class="stat"><strong>Low confidence:</strong> 15,100</span>
+</div>
+
+<h3>Final Action Queue</h3>
+
+<table>
+<tr>
+<th>Action</th>
+<th>Items</th>
+</tr>
+<tr><td>Monitor</td><td>13,093</td></tr>
+<tr><td>Refresh</td><td>8,178</td></tr>
+<tr><td>Refresh and Review</td><td>6,657</td></tr>
+<tr><td>Expand and Refresh</td><td>82</td></tr>
+</table>
+
+<h3>Top Features</h3>
+
+<table>
+<tr>
+<th>Feature</th>
+<th>Importance</th>
+</tr>
+<tr><td>days_with_impressions</td><td>0.1578</td></tr>
+<tr><td>log_impressions_90d</td><td>0.1282</td></tr>
+<tr><td>avg_position</td><td>0.1090</td></tr>
+<tr><td>content_age_days</td><td>0.0955</td></tr>
+<tr><td>char_count</td><td>0.0426</td></tr>
+<tr><td>word_count</td><td>0.0397</td></tr>
+<tr><td>log_clicks_90d</td><td>0.0346</td></tr>
+<tr><td>ctr</td><td>0.0330</td></tr>
+<tr><td>scroll_rate</td><td>0.0311</td></tr>
+<tr><td>days_with_sessions</td><td>0.0280</td></tr>
+</table>
+
+<h3>Generated Visualizations</h3>
+
+<p>
+The repository contains the generated action-mix, confidence, feature-importance,
+and trend-distribution charts.
+</p>
+
+<img src="../outputs/charts/action_mix.svg" alt="Action mix chart">
+<img src="../outputs/charts/confidence_mix.svg" alt="Confidence mix chart">
+<img src="../outputs/charts/top_feature_importance.svg" alt="Top feature importance chart">
+<img src="../outputs/charts/trend_distribution.svg" alt="Trend distribution chart">
+
+<h2>6. Ranked Recommendations</h2>
+
+<ol>
+<li>Start review with high-confidence recommendations.</li>
+<li>Inspect pages showing declining performance signals.</li>
+<li>Use the ranked queue to prioritize human investigation.</li>
+<li>Compare each recommendation against editorial and business context.</li>
+<li>Do not treat model scores as automatic publishing instructions.</li>
+</ol>
+
+<h2>7. Limitations & Honest Framing</h2>
+
+<ul>
+<li>Historical data may not represent every future situation.</li>
+<li>Model performance depends on the selected features and target definition.</li>
+<li>Validation results do not guarantee future performance.</li>
+<li>Content quality and business context may not be fully represented by model features.</li>
+<li>Recommendations require human review.</li>
+<li>The output is decision-support, not automatic production action.</li>
+</ul>
+
+<h2>8. Reproducibility</h2>
+
+<p>
+The notebooks, generated outputs, methodology checks and supporting documentation
+are available in the accompanying GitHub repository.
+</p>
+
+<p>
+Repository:
+<a href="https://github.com/MUHAMMADAFAN786/flyrank-ml-internship-starter">
+GitHub Repository
+</a>
+</p>
+
+<h2>9. Acknowledgments & Data Credit</h2>
+
+<p>
+Built on the <a href="https://flyrank.ai">FlyRank ML Internship dataset</a>.
+</p>
+
+<p>
+This project was completed as part of the FlyRank ML Internship track on
+Google Search Ranking & Discoverability.
+</p>
+
+</div>
+</body>
+</html>
